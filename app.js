@@ -6,8 +6,11 @@ const { dbConnection } = require("./db/mongoose");
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const multer = require('multer');
+var cors = require('cors');
 const app = express();
 
+///////////////////////////////////////////
+app.use(cors())
 ///////////////////////////////////////////
 app.set("view engine", "ejs");
 app.use(morgan("combined"));
@@ -26,27 +29,15 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-// app.post("/api/stores/menu/add-item", upload.single("img"));
-// app.put("/api/stores/menu/edit-item", upload.single("img"));
-// app.post("/api/delivery-agent/register", upload.fields([
-//     { name: "agentPhoto", maxCount: 1 },
-//     { name: "vehiclePhoto", maxCount: 1 },
-//     { name: "vehicleLicense", maxCount: 1 },
-//     { name: "driverLicense", maxCount: 1 },
-// ]))
-// app.put("/api/delivery-agent", upload.fields([
-//     { name: "agentPhoto", maxCount: 1 },
-//     { name: "vehiclePhoto", maxCount: 1 },
-//     { name: "vehicleLicense", maxCount: 1 },
-//     { name: "driverLicense", maxCount: 1 },
-// ]))
+app.post("/team/add-new", upload.single("image"));
 //////////////////////////////////////////
 //routes
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
-
+const teamRoutes = require("./routes/team");
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
+app.use("/team", teamRoutes);
 //db onnection
 dbConnection();
 const PORT = process.env.PORT || 3000;

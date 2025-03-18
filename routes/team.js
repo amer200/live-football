@@ -5,4 +5,6 @@ const isAdmin = require("../middlewares/admin").isAuth;
 
 
 routes.post('/add-new', isAdmin, teamControllers.addNewTeam);
+routes.get("/get-all", teamControllers.getAllTeams);
+routes.post("/edit-team", teamControllers.editTeam);
 module.exports = routes;

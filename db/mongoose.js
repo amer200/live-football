@@ -4,8 +4,11 @@ mongoose.set('strictQuery', true);
 
 exports.dbConnection = async () => {
     try {
-        const connection = await mongoose.connect('mongodb://localhost:27017/football')
-
+        if (process.env.DB_URL) {
+            var connection = await mongoose.connect(process.env.DB_URL)
+        } else {
+            var connection = await mongoose.connect('mongodb://localhost:27017/football')
+        }
         console.log('db connection done !');
         return connection
     }

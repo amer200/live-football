@@ -37,9 +37,12 @@ app.post("/team/edit-team", upload.single("image"));
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
 const teamRoutes = require("./routes/team");
+const matchRoutes = require("./routes/match");
+
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/team", teamRoutes);
+app.use("/match", matchRoutes);
 //db onnection
 dbConnection();
 const PORT = process.env.PORT || 3000;

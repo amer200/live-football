@@ -3,15 +3,16 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 exports.createUser = async (req, res) => {
     try {
-        const { name, phone, email, password, durationInDays } = req.body;
+        const { name, username, email, password, durationInDays } = req.body;
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + durationInDays);
-        const isPhoneUsed = await User.findOne({ phone: phone });
-        if (isPhoneUsed) return res.status(400).json({ message: "رقم الهاتف مستخدم بالفعل" });
+        const isUserNameUsed = await User.findOne({ username: username });
+        console.log(username)
+        if (isUserNameUsed) return res.status(400).json({ message: "اسم المستخدم موجود !!" });
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
             name: name,
-            phone: phone,
+            username: username,
             password: hashedPassword,
             email: email,
             subscriptionExpiresAt: expiresAt
@@ -28,14 +29,14 @@ exports.createUser = async (req, res) => {
 }
 exports.logIn = async (req, res) => {
     try {
-        const { phone, password } = req.body;
-        const user = await User.findOne({ phone: phone });
+        const { username, password } = req.body;
+        const user = await User.findOne({ username: username });
         if (!user || !bcrypt.compareSync(password, user.password)) return res.status(400).json({ message: "رقم الهاتف او كلمة المرور خطاء!" });
         if (new Date(user.subscriptionExpiresAt).getTime() < Date.now()) return res.status(400).json({ message: "انتهت مدة الاشتراك تواص مع الادارة للتجديد!" })
         const u = {
             id: user._id,
             name: user.name,
-            phone: user.phone,
+            username: user.username,
             subscriptionExpiresAt: user.subscriptionExpiresAt,
             rolle: "user"
         }

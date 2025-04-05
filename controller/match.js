@@ -82,3 +82,60 @@ exports.getCategByName = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
+exports.addMatch = async (req, res) => {
+    try {
+        const { firstTeam, secondTeam, stadium, date, categ, urls } = req.body;
+        const myMatch = new Match({ firstTeam, secondTeam, stadium, date, categ, urls });
+        await myMatch.save()
+        return res.status(200).json({
+            msg: "ok",
+            data: myMatch
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "خطأ في السيرفر", error: error });
+    }
+}
+
+exports.getAllMatch = async (req, res) => {
+    try {
+        const matchs = await Match.find().populate("firstTeam").populate("secondTeam").populate("categ");
+        return res.status(200).json({
+            msg: "ok",
+            data: matchs
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "خطأ في السيرفر", error: error });
+    }
+}
+
+exports.getMatchById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const match = await Match.findById(id).populate("firstTeam").populate("secondTeam").populate("categ");
+        return res.status(200).json({
+            msg: "ok",
+            data: match
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "خطأ في السيرفر", error: error });
+    }
+}
+exports.addUrls = async (req, res) => {
+    try {
+        const urls = req.body.urls;
+        const id = req.body.id;
+        const match = await Match.findById(id);
+        match.urls = urls;
+        await match.save()
+        return res.status(200).json({
+            msg: "ok",
+            data: match
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "خطأ في السيرفر", error: error });
+    }
+}

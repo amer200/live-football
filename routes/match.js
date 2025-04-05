@@ -9,4 +9,9 @@ routes.get('/remove-categ/:id', isAdmin, matchController.removeCateg);
 routes.get('/get-all-categ', isAdmin, matchController.getAllCateg);
 routes.get('/get-categ-by-name/:name', isAdmin, matchController.getCategByName);
 routes.get('/get-categ-by-id/:id', isAdmin, matchController.getCategById);
+//////////////////////////match/////////////////////////////////////
+routes.post('/add-new-match', isAdmin,matchController.addMatch);
+routes.get('/get-all-matchs',isAdmin, matchController.getAllMatch);
+routes.get('/get-match-by-id/:id',isAdmin, matchController.getMatchById);
+// routes.post('/match-urls', matchController.addUrls);
 module.exports = routes;

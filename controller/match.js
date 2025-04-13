@@ -89,8 +89,10 @@ exports.getCategByName = async (req, res) => {
 }
 exports.addMatch = async (req, res) => {
     try {
-        const { firstTeam, secondTeam, stadium, date, categ, urls } = req.body;
-        const myMatch = new Match({ firstTeam, secondTeam, stadium, date, categ, urls });
+        const { firstTeam, secondTeam, stadiumName, date, categ } = req.body;
+        const urls = JSON.parse(req.body.urls);
+        const img = req.file.path;
+        const myMatch = new Match({ firstTeam: firstTeam, secondTeam: secondTeam, stadium: { name: stadiumName, img: img }, date: date, categ: categ, urls: urls });
         await myMatch.save()
         return res.status(200).json({
             msg: "ok",

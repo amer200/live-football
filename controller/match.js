@@ -4,8 +4,10 @@ const Categ = require("../models/categ");
 exports.addCateg = async (req, res) => {
     try {
         const name = req.body.name;
+        const image = req.file.path;
         const categ = new Categ({
-            name: name
+            name: name,
+            img: image
         })
         await categ.save()
         return res.status(200).json({
@@ -21,6 +23,9 @@ exports.editCateg = async (req, res) => {
     try {
         const { id, name } = req.body;
         const categ = await Categ.findById(id);
+        if (req.file) {
+            categ.img = req.file.path;
+        }
         categ.name = name;
         await categ.save()
         return res.status(200).json({

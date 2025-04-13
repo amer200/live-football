@@ -31,6 +31,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 app.post("/team/add-new", upload.single("image"));
 app.post("/team/edit-team", upload.single("image"));
+app.post("/match/add-categ", upload.single("image"));
+app.post("/match/edit-categ", upload.single("image"));
 
 //////////////////////////////////////////
 //routes

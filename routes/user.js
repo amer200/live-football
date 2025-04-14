@@ -5,4 +5,5 @@ const isAdmin = require("../middlewares/admin").isAuth;
 routes.post("/create-user", isAdmin, userController.createUser);
 routes.post("/log-in", userController.logIn);
 routes.post("/update-subscription", isAdmin, userController.updateExtendSubscription);
+routes.get("/get-all", isAdmin, userController.getAllUsers);
 module.exports = routes;

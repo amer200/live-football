@@ -41,9 +41,11 @@ exports.logIn = async (req, res) => {
             rolle: "user"
         }
         const token = jwt.sign({
-            exp: Math.floor(Date.now() / 1000) + (3 * 60 * 60),
+            expiresIn: '7d',
             data: { user: u },
         }, process.env.ACCESS_TOKEN);
+        user.token = token;
+        await user.save();
         return res.status(200).json({
             msg: "ok",
             token: token
@@ -67,6 +69,19 @@ exports.updateExtendSubscription = async (req, res) => {
             data: user.subscriptionExpiresAt
         })
     } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "خطأ في السيرفر", error: error });
+    }
+}
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        return res.status(200).json({
+            msg: "ok",
+            data: users
+        })
+    }
+    catch (error) {
         console.log(error)
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }

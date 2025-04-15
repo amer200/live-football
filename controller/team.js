@@ -50,3 +50,16 @@ exports.editTeam = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
+exports.removeTeam = async (req, res) => {
+    try {
+        const id = req.params.id;
+        await Team.findByIdAndDelete(id);
+        return res.status(200).json({
+            msg: "ok",
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "خطأ في السيرفر", error: error });
+    }
+}

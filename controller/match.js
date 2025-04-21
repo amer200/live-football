@@ -1,7 +1,7 @@
 const Match = require("../models/match");
 const Categ = require("../models/categ");
 
-exports.addCateg = async (req, res) => {
+exports.addCateg = async(req, res) => {
     try {
         const name = req.body.name;
         const image = req.file.path;
@@ -19,7 +19,7 @@ exports.addCateg = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.editCateg = async (req, res) => {
+exports.editCateg = async(req, res) => {
     try {
         const { id, name } = req.body;
         const categ = await Categ.findById(id);
@@ -37,7 +37,7 @@ exports.editCateg = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.removeCateg = async (req, res) => {
+exports.removeCateg = async(req, res) => {
     try {
         const id = req.params.id;
         await Categ.findByIdAndDelete(id);
@@ -49,7 +49,7 @@ exports.removeCateg = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.getAllCateg = async (req, res) => {
+exports.getAllCateg = async(req, res) => {
     try {
         const categs = await Categ.find();
         return res.status(200).json({
@@ -61,7 +61,7 @@ exports.getAllCateg = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.getCategById = async (req, res) => {
+exports.getCategById = async(req, res) => {
     try {
         const id = req.params.id;
         const categ = await Categ.findById(id);
@@ -74,7 +74,7 @@ exports.getCategById = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.getCategByName = async (req, res) => {
+exports.getCategByName = async(req, res) => {
     try {
         const name = req.params.name;
         const categ = await Categ.findOne({ name: name });
@@ -87,7 +87,7 @@ exports.getCategByName = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.addMatch = async (req, res) => {
+exports.addMatch = async(req, res) => {
     try {
         const { firstTeam, secondTeam, stadiumName, date, categ } = req.body;
         const urls = JSON.parse(req.body.urls);
@@ -104,7 +104,7 @@ exports.addMatch = async (req, res) => {
     }
 }
 
-exports.getAllMatch = async (req, res) => {
+exports.getAllMatch = async(req, res) => {
     try {
         const matchs = await Match.find().populate("firstTeam").populate("secondTeam").populate("categ");
         return res.status(200).json({
@@ -117,7 +117,7 @@ exports.getAllMatch = async (req, res) => {
     }
 }
 
-exports.getMatchById = async (req, res) => {
+exports.getMatchById = async(req, res) => {
     try {
         const id = req.params.id;
         const match = await Match.findById(id).populate("firstTeam").populate("secondTeam").populate("categ");
@@ -130,7 +130,7 @@ exports.getMatchById = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.addUrls = async (req, res) => {
+exports.addUrls = async(req, res) => {
     try {
         const urls = req.body.urls;
         const id = req.body.id;
@@ -146,7 +146,7 @@ exports.addUrls = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.removeMatch = async (req, res) => {
+exports.removeMatch = async(req, res) => {
     try {
         const id = req.params.id;
         await Match.findByIdAndDelete(id);
@@ -154,6 +154,31 @@ exports.removeMatch = async (req, res) => {
             msg: "ok",
         })
 
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "خطأ في السيرفر", error: error });
+    }
+}
+exports.editMatch = async(req, res) => {
+    try {
+        const { id, firstTeam, secondTeam, stadiumName, date, categ } = req.body;
+        const urls = JSON.parse(req.body.urls);
+        const match = await Match.findById(id);
+        if (req.file) {
+            const img = req.file.path;
+            match.stadium.img = img;
+        }
+        match.firstTeam = firstTeam;
+        match.secondTeam = secondTeam;
+        match.stadium.name = stadiumName;
+        match.date = date;
+        match.categ = categ;
+        match.urls = urls;
+        await match.save();
+        return res.status(200).json({
+            msg: "ok",
+            data: match
+        })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "خطأ في السيرفر", error: error });

@@ -11,7 +11,7 @@ const app = express();
 
 ///////////////////////////////////////////
 app.use(cors())
-///////////////////////////////////////////
+    ///////////////////////////////////////////
 app.set("view engine", "ejs");
 app.use(morgan("combined"));
 app.use(express.static("public"));
@@ -20,10 +20,10 @@ app.use(express.json());
 app.use(cookieParser());
 //////////////////////////////////////////
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, 'public/uploads/')
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + '.' + file.originalname;
         cb(null, file.fieldname + '-' + uniqueSuffix)
     }

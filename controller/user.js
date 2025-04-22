@@ -60,18 +60,44 @@ exports.updateExtendSubscription = async (req, res) => {
         const { userId, durationInDays } = req.body;
         const user = await User.findById(userId);
         if (!user) return res.status(400).json({ message: "المستخدم غير موجود" });
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + durationInDays);
-        user.subscriptionExpiresAt = expiresAt;
+    
+        const currentDate = new Date();
+        const currentExpiration = user.subscriptionExpiresAt;
+    
+        // نحدد هل نزود من دلوقتي ولا من تاريخ الاشتراك الحالي
+        const baseDate = currentExpiration > currentDate ? currentExpiration : currentDate;
+    
+        // نزود عدد الأيام
+        const newExpiration = new Date(baseDate);
+        newExpiration.setDate(newExpiration.getDate() + durationInDays);
+    
+        user.subscriptionExpiresAt = newExpiration;
         await user.save();
+    
         return res.status(200).json({
             msg: "ok",
             data: user.subscriptionExpiresAt
-        })
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
+    // try {
+    //     const { userId, durationInDays } = req.body;
+    //     const user = await User.findById(userId);
+    //     if (!user) return res.status(400).json({ message: "المستخدم غير موجود" });
+    //     const expiresAt = new Date();
+    //     expiresAt.setDate(expiresAt.getDate() + durationInDays);
+    //     user.subscriptionExpiresAt = expiresAt;
+    //     await user.save();
+    //     return res.status(200).json({
+    //         msg: "ok",
+    //         data: user.subscriptionExpiresAt
+    //     })
+    // } catch (error) {
+    //     console.log(error)
+    //     res.status(500).json({ message: "خطأ في السيرفر", error: error });
+    // }
 }
 exports.getAllUsers = async (req, res) => {
     try {

@@ -8,7 +8,7 @@ const matchSchema = new mongoose.Schema({
     date: { type: Date, required: true },
     categ: { type: mongoose.Schema.Types.ObjectId, ref: "Categ" },
     urls: [{ url: String, desc: String }],
-    desc: {type: String}
+    desc: { type: String }
 
 })
 

@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-exports.createUser = async (req, res) => {
+exports.createUser = async(req, res) => {
     try {
         const { name, username, email, password, durationInDays } = req.body;
         const expiresAt = new Date();
@@ -27,7 +27,7 @@ exports.createUser = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.logIn = async (req, res) => {
+exports.logIn = async(req, res) => {
     try {
         const { username, password } = req.body;
         const user = await User.findOne({ username: username });
@@ -55,25 +55,20 @@ exports.logIn = async (req, res) => {
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }
 }
-exports.updateExtendSubscription = async (req, res) => {
+exports.updateExtendSubscription = async(req, res) => {
     try {
         const { userId, durationInDays } = req.body;
         const user = await User.findById(userId);
         if (!user) return res.status(400).json({ message: "المستخدم غير موجود" });
-    
         const currentDate = new Date();
         const currentExpiration = user.subscriptionExpiresAt;
-    
-        // نحدد هل نزود من دلوقتي ولا من تاريخ الاشتراك الحالي
         const baseDate = currentExpiration > currentDate ? currentExpiration : currentDate;
-    
-        // نزود عدد الأيام
         const newExpiration = new Date(baseDate);
         newExpiration.setDate(newExpiration.getDate() + durationInDays);
-    
+
         user.subscriptionExpiresAt = newExpiration;
         await user.save();
-    
+
         return res.status(200).json({
             msg: "ok",
             data: user.subscriptionExpiresAt
@@ -99,15 +94,14 @@ exports.updateExtendSubscription = async (req, res) => {
     //     res.status(500).json({ message: "خطأ في السيرفر", error: error });
     // }
 }
-exports.getAllUsers = async (req, res) => {
+exports.getAllUsers = async(req, res) => {
     try {
         const users = await User.find();
         return res.status(200).json({
             msg: "ok",
             data: users
         })
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error)
         res.status(500).json({ message: "خطأ في السيرفر", error: error });
     }

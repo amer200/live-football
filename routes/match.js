@@ -2,6 +2,7 @@ const express = require("express");
 const routes = express.Router();
 const matchController = require("../controller/match");
 const isAdmin = require("../middlewares/admin").isAuth;
+const isUser = require("../middlewares/user").isAuth;
 const { isAuthWithRoles } = require("../middlewares/isAuthWithRoles");
 routes.post('/add-categ', isAdmin, matchController.addCateg);
 routes.post('/edit-categ', isAdmin, matchController.editCateg);

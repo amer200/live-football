@@ -16,5 +16,5 @@ routes.get('/get-all-matchs', isAuthWithRoles(['admin', 'user']), matchControlle
 routes.get('/get-match-by-id/:id', isAuthWithRoles(['admin', 'user']), matchController.getMatchById);
 routes.get('/delete-match/:id', isAdmin, matchController.removeMatch);
 routes.post('/edit-match', isAdmin, matchController.editMatch);
-routes.get('/get-match-by-categ/:cId', matchController.getMatchCategId);
+routes.get('/get-match-by-categ/:cId', isAuthWithRoles(['admin', 'user']), matchController.getMatchCategId);
 module.exports = routes;

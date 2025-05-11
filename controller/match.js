@@ -188,7 +188,7 @@ exports.editMatch = async(req, res) => {
 exports.getMatchCategId = async(req, res) => {
     try {
         const categId = req.params.cId;
-        const matchs = await Match.find({ categ: categId }).populate("categ");
+        const matchs = await Match.find({ categ: categId }).populate("firstTeam").populate("secondTeam").populate("categ");
         return res.status(200).json({
             data: matchs
         })
